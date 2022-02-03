@@ -121,22 +121,71 @@ This is almost the same as the first quantifier, but here we're saying "validate
 
 ### OR Operator
 
+The regular expression `/^#?([0-9a-f]{6}|[0-9a-f]{3})$/i` is interesting because it has 2 different outcomes which would both validate the input given. 
+
+Luckily it can test for both cases simultaneously. The ( `|` ) character is called an alternation. It acts like a boolean `OR`, matching one sequence or another. It can operate within a group, or on a whole expression. The patterns will be tested in order.
+
+Hexadecimal color codes can be 6 characters in length (`#ffffff`) or 3 characters in length (`#fff`), without counting the hashtag. Both are valid hexadecimal color codes so it needs to account for both cases. Also worth noting, the following example only accepts inputs of length 6 or 3, so a hexadecimal color code of `#ffff` would fail to validate using this regex.
+
+In reference to the regex the alternation character tells us that the code will look to match hexadecimal codes with a length of 6 first, then try to find hexadecimal codes with a length of 3.
+
 ### Character Classes
+
+Character classes match a character from a specific set. There are a number of predefined character classes and you can also define your own sets.
+
+In the regular expression `/^#?([0-9a-f]{6}|[0-9a-f]{3})$/i` which checks for the validity of a hexadecimal color code we define one character class:
+
+        [0-9a-f]
+
+It's actually defined twice to check it for the two possible hexadecimal outcomes. As the character class is defined above it states that we're looking to match any digit `0-9` and any *lowercase* instance of a letter `a-f`.
+
+There's also an `i` token at the end of the regex which ultimately infulences the defined character class to match *any* case of a letter `a-f`.
 
 ### Flags
 
+Expression flags change how the expression is interpreted. Flags follow the closing forward slash of the expression (ex. `/.+/igm` ).
+
+As stated in the previous section, the decision to add an `i` token at the end of the regex changes how the expression is interpreted. The ignore case (`i`) makes the whole expression case-insensitive, hence it can decipher both `#fffFFF` and `#fffffF` as the same hexadecimal color value.
+
+Here's another example of `i` in use:
+        
+        // Example
+        /aBc/i => matches: "AbC" == "aBc" === "abc" === "ABC"
+
 ### Grouping and Capturing
 
-### Bracket Expressions
+We can group multiple tokens together and create a capture group for extracting a substring or using a backreference. Here's a quick example:
+
+        // Example
+        // The plus (`+`) matches 1 or more of the preceding token, in this case a reference of `ha`
+            (ha)+ => // matches "hahaha" "haa" "hah!"
+
+The regex for hexadecimal color codes has 1 capturing group: 
+
+        ([0-9a-f]{6}|[0-9a-f]{3})
+
+And as we saw earlier the alternation token ( `|` ) allows us to have a first and second option for matching hexadecimal codes.
 
 ### Greedy and Lazy Match
 
-### Boundaries
+We have 2 good examples of using greedy and lazy matching.
 
-### Back-references
+First, let's take a look at an example of greedy matching. In the regex `{6}` and `{3}` are the quantifiers. Although in this instance we are requiring the match to be lengths of `{6}` or `{3}` *only*, there are other ways to define a quantifier to show an example of greediness.
 
-### Look-ahead and Look-behind
+What if we changed the regex to look like this:
+
+        /^#?([0-9a-f]{3,6})$/i
+
+Well, in this instance it would validate hexadecimal color codes from lengths 3 up to 6, with lengths of 4 and 5 validated. We don't want that but that's greediness. Remember that the regex engine is eager to return a match. It will not continue backtracking further to see if there is another possible match. 
+
+Like the plus ( `+` ), the star ( `*` ) and the repetition using curly braces are greedy.
+
+We also have an example of lazy matching. 
+
+Remember the ( `?` ) token, which basically makes the preceding token nonexistant and acts as an example of lazy matching. In the regex, the part of the expression referencing the hashtag ( `#?` ) is saying, "Match anything with a hashtag, but you know what it's totally fine if there's no hashtag you can match that too".
 
 ## Author
 
-A short section about the author with a link to the author's GitHub profile (replace with your information and a link to your profile)
+If you have any questions about this project contact me directly at darnelldavy@gmail.com 
+  
+View more of my projects at https://www.github.com/DarnellDavy
