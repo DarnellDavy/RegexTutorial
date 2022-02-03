@@ -82,17 +82,42 @@ Here's a brief breakdown of the validation occuring with the regex expression `/
 - [Character Classes](#character-classes)
 - [Flags](#flags)
 - [Grouping and Capturing](#grouping-and-capturing)
-- [Bracket Expressions](#bracket-expressions)
 - [Greedy and Lazy Match](#greedy-and-lazy-match)
-- [Boundaries](#boundaries)
-- [Back-references](#back-references)
-- [Look-ahead and Look-behind](#look-ahead-and-look-behind)
 
 ## Regex Components
 
 ### Anchors
 
+The regex example `/^#?([0-9a-f]{6}|[0-9a-f]{3})$/i` uses 2 anchors, ( `^` ) and ( `$` ). The ( `^` ) symbol indicates the beginning of a string while the ( `$` ) symbol indicates the end of a string. For reference the string is what we're looking to validate.
+
+Anchors are unique in that they match a position within a string, not a character. Thus, in the example above both the achors indicate the beginning and the end of the string we're looking to match, not a specific character.
+
 ### Quantifiers
+
+Quantifiers indicate that the preceding token must be matched a certain number of times. By default, quantifiers are greedy, and will match as many characters as possible.
+
+While there are seeveral different qualifiers, the regex `/^#?([0-9a-f]{6}|[0-9a-f]{3})$/i` only uses 3 basic quantifiers, technically only 2 different quantifier types. 
+
+The ( `?` ) is called an optional because the regex considers the token/character preceding the ( `?` ) to be optional, and will return matches with and without the specified token, basically making that token nonexistant. For the expression, the ( `?` ) character is preceded by the ( `#` ) token, meaning the regex will return matches with and without the ( `#` ) character attatched. 
+
+Below is another good example of an optional quantifier:
+
+        // Example
+        colou?r => // accepts "color" or "colour"
+
+The second type of quantifier used in the regex is called a quantifier and is expressed as `{6}` and `{3}`. This quantifier type matches the specified quantity of the previous token. For example, `{1,3}` will match 1 to 3, `{3}` will match exactly 3, and `{3,}` will match 3 or more.
+
+Here's the first part of the regular expression:
+
+        [0-9a-f]{6}
+
+Here we're saying, "validate if the string matches any of the following characters `0-9` or `a-f` and is 6 characters in length exactly (`{6}`)".
+
+The second part of the expression is very similiar to the first:
+
+        [0-9a-f]{3}
+
+This is almost the same as the first quantifier, but here we're saying "validate if the string matches any of the following characters `0-9` or `a-f` and is 3 characters in length exactly (`{3}`).
 
 ### OR Operator
 
